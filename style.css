@@ -1,53 +1,57 @@
 /* =============================================================
    PLANIQ — Business Intelligence & Analytics Consulting
-   Stylesheet  |  Version 13  |  planiq.com
+   Stylesheet  |  Version 14  |  planiq.com
    =============================================================
 
    TABLE OF CONTENTS
    ─────────────────────────────────────────────────────────────
-   01  Design Tokens (CSS custom properties)
-   02  Reset & Base
-   03  Typography utilities
-   04  Buttons — standard variants
-   05  Buttons — stacked text + circle-arrow (new hero style)
-   06  Navigation
-   07  Page system (SPA routing)
-   08  Hero section
-   09  Value strip
-   10  Problem section
-   11  Services overview (image-backed cards)
-   12  Industries hub
-   13  Impact numbers
-   14  Process steps
-   15  Testimonials
-   16  CTA banner
-   17  FAQ accordion
-   18  Contact section
-   19  Footer
-   20  Industry subpage components
-       20a  Industry hero
-       20b  Industry stats bar
-       20c  Industry services grid
-       20d  Industry charts section
-       20e  Industry outcomes
-       20f  Industry CTA
-   21  About section & filmstrip
-   22  Why PlanIQ section
-   23  Animations & scroll reveal
-   24  Responsive breakpoints
+   01  Design Tokens            CSS custom properties / variables
+   02  Reset & Base             Global reset, scrollbar
+   03  Typography               Overline, headline, prose
+   04  Buttons — Standard       .btn variants (primary, amber,
+                                outline, outline-white, white)
+   05  Buttons — Stacked        .btn-stack hero style
+                                (text label + circle arrow)
+   06  Buttons — Tile Card      .btn-tile CTA banner style
+                                (card with large bold arrow)
+   07  Navigation               Fixed nav, logo mark, dropdown
+   08  Page System              SPA show/hide routing
+   09  Hero Section             Split grid hero layout
+   10  Value Strip              4-column stats band
+   11  Problem Section          Dark split layout + chart card
+   12  Services Overview        12 image-backed service cards
+   13  Industries Hub           6-card photo grid
+   14  Impact Numbers           4-col proof section
+   15  Process Steps            4-step approach section
+   16  Testimonials             3-card quote section
+   17  CTA Banner               Full-width indigo CTA
+   18  FAQ Accordion            Side-by-side FAQ layout
+   19  Contact Section          Split visual + form
+   20  Footer                   4-col dark footer
+   21  Industry Subpages        Hero, stats bar, services grid,
+                                charts, outcomes, CTA
+   22  About & Filmstrip        Split about + image bar
+   23  Why PlanIQ               Dark 3-col grid
+   24  Animations               fadeUp, pulse, scroll reveal
+   25  Responsive               1100px tablet + 720px mobile
 
-   FONTS — add these links before this stylesheet
+   FONTS — include before this stylesheet
    ─────────────────────────────────────────────────────────────
    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+   <link href="https://fonts.googleapis.com/css2?family=Fraunces
+     :opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600
+     &family=Inter:wght@300;400;500;600
+     &family=JetBrains+Mono:wght@400;500
+     &display=swap" rel="stylesheet"/>
 
    COLOUR PALETTE
    ─────────────────────────────────────────────────────────────
-   Primary   Deep Indigo     #1e3a8a   buttons, icons, accents
-   Accent    Coral Orange    #f97316   CTAs, hover, highlights
-   Dark      Midnight Navy   #0a0f1e   dark sections, footer
-   Surface   Periwinkle Fog  #f5f7ff   light backgrounds
-   Text      Ink             #111827   body copy
+   Primary     Deep Indigo      #1e3a8a
+   Accent      Coral Orange     #f97316
+   Dark bg     Midnight Navy    #0a0f1e
+   Light bg    Periwinkle Fog   #f5f7ff
+   Text        Ink              #111827
+   Border      Periwinkle Rule  #dbe1f0
    ============================================================= */
 
 
@@ -59,37 +63,37 @@
 
   /* Primary brand — Deep Indigo */
   --teal:        #1e3a8a;   /* main brand colour, buttons, icons      */
-  --teal-deep:   #1e2e6e;   /* hover text, dark indigo                */
+  --teal-deep:   #1e2e6e;   /* dark indigo for hover text             */
   --teal-mid:    #2444a8;   /* button hover background                */
   --teal-lt:     #eef2ff;   /* light indigo fills, tags, badges       */
-  --teal-glow:   rgba(30, 58, 138, 0.20); /* box-shadow glow         */
+  --teal-glow:   rgba(30, 58, 138, 0.20);
 
   /* Accent — Coral Orange */
   --amber:       #f97316;   /* CTA highlights, hover accents          */
   --amber-lt:    #fff7ed;   /* light orange backgrounds               */
-  --amber-deep:  #ea580c;   /* amber hover states                     */
+  --amber-deep:  #ea580c;   /* darker amber for hover states          */
 
   /* Dark foundation — Midnight Navy */
   --slate:       #0a0f1e;   /* dark section backgrounds, footer       */
   --slate-mid:   #111827;   /* cards within dark sections             */
-  --slate-light: #1e2a3d;   /* borders and dividers in dark sections  */
+  --slate-light: #1e2a3d;   /* borders/dividers in dark sections      */
 
   /* Neutral text */
-  --ink:         #111827;   /* primary body text                      */
-  --ink-70:      rgba(17, 24, 39, 0.70);  /* secondary body text     */
-  --ink-45:      rgba(17, 24, 39, 0.45);  /* labels, captions        */
-  --ink-15:      rgba(17, 24, 39, 0.12);  /* decorative numbers      */
+  --ink:         #111827;
+  --ink-70:      rgba(17, 24, 39, 0.70);
+  --ink-45:      rgba(17, 24, 39, 0.45);
+  --ink-15:      rgba(17, 24, 39, 0.12);
 
   /* Neutral surfaces */
-  --fog:         #f5f7ff;   /* light section backgrounds              */
-  --fog-warm:    #f0f4ff;   /* card hover backgrounds                 */
-  --white:       #ffffff;   /* base background                        */
-  --rule:        #dbe1f0;   /* borders and dividers                   */
+  --fog:         #f5f7ff;
+  --fog-warm:    #f0f4ff;
+  --white:       #ffffff;
+  --rule:        #dbe1f0;
 
   /* Typography */
-  --font-serif:  'Fraunces', Georgia, serif;      /* headings, display */
-  --font-sans:   'Inter', system-ui, sans-serif;  /* body, UI text     */
-  --font-mono:   'JetBrains Mono', monospace;     /* labels, badges    */
+  --font-serif:  'Fraunces', Georgia, serif;
+  --font-sans:   'Inter', system-ui, sans-serif;
+  --font-mono:   'JetBrains Mono', monospace;
 
   /* Motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,17 +133,14 @@ img {
   object-fit: cover;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+a { text-decoration: none; color: inherit; }
 
-::-webkit-scrollbar        { width: 3px; }
-::-webkit-scrollbar-thumb  { background: var(--teal); }
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--teal); }
 
 
 /* ─────────────────────────────────────────────────────────────
-   03  TYPOGRAPHY UTILITIES
+   03  TYPOGRAPHY
    ───────────────────────────────────────────────────────────── */
 
 /* Overline — mono uppercase label with leading rule */
@@ -161,8 +162,8 @@ a {
   background: currentColor;
   flex-shrink: 0;
 }
-.overline.on-dark        { color: rgba(255, 255, 255, 0.5); }
-.overline.on-dark::before{ background: rgba(255, 255, 255, 0.5); }
+.overline.on-dark        { color: rgba(255, 255, 255, 0.50); }
+.overline.on-dark::before{ background: rgba(255, 255, 255, 0.50); }
 .overline.amber          { color: var(--amber); }
 .overline.amber::before  { background: var(--amber); }
 
@@ -180,9 +181,9 @@ h2.headline em         { font-style: normal; color: var(--teal); }
 h2.headline.on-dark em { font-style: normal; color: #60a5fa; }
 
 /* Body prose */
-.prose             { font-size: 1rem; font-weight: 400; line-height: 1.80; color: var(--ink-70); }
-.prose strong      { font-weight: 600; color: var(--ink); }
-.prose.on-dark     { color: rgba(255, 255, 255, 0.6); }
+.prose           { font-size: 1rem; font-weight: 400; line-height: 1.80; color: var(--ink-70); }
+.prose strong    { font-weight: 600; color: var(--ink); }
+.prose.on-dark   { color: rgba(255, 255, 255, 0.60); }
 
 
 /* ─────────────────────────────────────────────────────────────
@@ -205,7 +206,7 @@ h2.headline.on-dark em { font-style: normal; color: #60a5fa; }
   transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
-/* Primary — filled indigo */
+/* Primary — filled indigo, bold, rounded */
 .btn-primary {
   background: #1e3a8a;
   color: var(--white);
@@ -225,27 +226,25 @@ h2.headline.on-dark em { font-style: normal; color: #60a5fa; }
 .btn-amber       { background: var(--amber); color: var(--white); }
 .btn-amber:hover { background: var(--amber-deep); transform: translateY(-1px); }
 
-/* Outline — bordered on light backgrounds */
+/* Outline — on light backgrounds */
 .btn-outline       { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
 .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
 
-/* Outline white — bordered on dark backgrounds */
-.btn-outline-white       { background: transparent; color: var(--white); border: 1.5px solid rgba(255, 255, 255, 0.3); }
+/* Outline white — on dark backgrounds */
+.btn-outline-white       { background: transparent; color: var(--white); border: 1.5px solid rgba(255, 255, 255, 0.30); }
 .btn-outline-white:hover { border-color: rgba(255, 255, 255, 0.75); }
 
-/* White filled — for use on indigo/dark sections */
+/* White filled — on indigo/dark sections */
 .btn-white       { background: var(--white); color: var(--teal); }
 .btn-white:hover { background: var(--fog); }
 
-/* Arrow icon inside standard buttons */
-.btn svg               { width: 13px; height: 13px; flex-shrink: 0; transition: transform 0.2s; }
-.btn:hover svg         { transform: translateX(3px); }
+/* Inline arrow icon */
+.btn svg             { width: 13px; height: 13px; flex-shrink: 0; transition: transform 0.2s; }
+.btn:hover svg       { transform: translateX(3px); }
 
 
 /* ─────────────────────────────────────────────────────────────
-   05  BUTTONS — STACKED TEXT + CIRCLE-ARROW (new hero style)
-       Matches the uploaded image: label on top, large arrow below.
-       On hover: circle fills orange and arrow rotates 45deg.
+   05  BUTTONS — STACKED (hero: label on top, circle arrow below)
    ───────────────────────────────────────────────────────────── */
 
 .btn-stack {
@@ -285,7 +284,6 @@ h2.headline.on-dark em { font-style: normal; color: #60a5fa; }
   background: var(--amber);
   transform: rotate(-45deg);
 }
-
 .btn-stack-arrow svg {
   width: 22px;
   height: 22px;
@@ -297,72 +295,144 @@ h2.headline.on-dark em { font-style: normal; color: #60a5fa; }
 }
 
 /* Dark background variant */
-.btn-stack.on-dark .btn-stack-label       { color: rgba(255, 255, 255, 0.92); }
-.btn-stack.on-dark .btn-stack-arrow       { background: rgba(255, 255, 255, 0.10); border: 1.5px solid rgba(255, 255, 255, 0.18); }
-.btn-stack.on-dark:hover .btn-stack-arrow { background: var(--amber); border-color: var(--amber); }
+.btn-stack.on-dark .btn-stack-label        { color: rgba(255, 255, 255, 0.92); }
+.btn-stack.on-dark .btn-stack-arrow        { background: rgba(255,255,255,0.10); border: 1.5px solid rgba(255,255,255,0.18); }
+.btn-stack.on-dark:hover .btn-stack-arrow  { background: var(--amber); border-color: var(--amber); }
 
 
 /* ─────────────────────────────────────────────────────────────
-   06  NAVIGATION
+   06  BUTTONS — TILE CARD (CTA banner: square card + large arrow)
+       Matches uploaded reference image: blue tile, text top-left,
+       bold dark arrow bottom-right, lifts and shimmers on hover.
    ───────────────────────────────────────────────────────────── */
 
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 900;
-  height: 70px;
+.btn-tile {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 200px;
+  height: 180px;
+  background: #1e3a8a;
+  border: none;
+  cursor: pointer;
+  padding: 22px 20px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s var(--ease), transform 0.2s var(--ease), box-shadow 0.25s;
+}
+.btn-tile:hover {
+  background: #2444a8;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(10, 15, 30, 0.35);
+}
+
+.btn-tile-label {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.btn-tile-arrow {
+  align-self: flex-end;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--rule);
-  transition: box-shadow 0.3s;
+  justify-content: center;
+  transition: transform 0.25s var(--ease);
 }
-nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
+.btn-tile:hover .btn-tile-arrow { transform: translate(3px, -3px); }
 
-.nav-brand                  { display: flex; align-items: center; gap: 11px; cursor: pointer; }
-.planiq-mark                { width: 44px; height: 44px; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 0; position: relative; overflow: visible; }
-.planiq-mark::after         { display: none; }
-.nav-brand-text             { display: flex; flex-direction: column; gap: 2px; }
-.nav-brand-wordmark         { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500; color: var(--slate); letter-spacing: -0.02em; line-height: 1; }
-.nav-brand-wordmark .iq     { color: var(--amber); font-style: italic; }
-.nav-brand-sub              { font-family: var(--font-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-deep); }
-.nav-links                  { display: flex; align-items: center; gap: 1.6rem; list-style: none; }
-.nav-links a,
-.nav-links button           { font-size: 0.78rem; font-weight: 500; color: var(--ink-70); letter-spacing: 0.01em; transition: color 0.2s; background: none; border: none; cursor: pointer; font-family: var(--font-sans); padding: 0; }
-.nav-links a:hover,
-.nav-links button:hover     { color: var(--teal); }
+.btn-tile-arrow svg {
+  width: 44px;
+  height: 44px;
+  stroke: #0a0f1e;
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-/* Industries dropdown */
-.nav-dropdown               { position: relative; }
-.nav-dropdown-menu          { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; background: var(--white); border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 32px rgba(10, 15, 30, 0.12); min-width: 260px; z-index: 999; padding: 8px 0; }
-.nav-dropdown-menu.open     { display: block !important; }
-.nav-dropdown-menu a        { display: flex; align-items: center; gap: 10px; padding: 10px 18px; font-size: 0.8rem; color: var(--ink-70); font-weight: 400; transition: background 0.15s, color 0.15s; cursor: pointer; }
-.nav-dropdown-menu a:hover  { background: var(--teal-lt); color: var(--teal); }
-.nav-dropdown-menu a .ind-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
-.nav-dropdown-arrow         { font-size: 0.65rem; margin-left: 3px; }
-.nav-links .nav-cta a       { background: var(--teal); color: var(--white); padding: 9px 22px; border-radius: 3px; font-size: 0.76rem; font-weight: 600; transition: background 0.2s; }
-.nav-links .nav-cta a:hover { background: var(--teal-mid); }
+/* Shimmer overlay on hover */
+.btn-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-tile:hover::after { opacity: 1; }
+
 
 
 /* ─────────────────────────────────────────────────────────────
-   07  PAGE SYSTEM  (JS toggles .active to show/hide pages)
+   07  NAVIGATION
+   ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════ NAV ═══════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;height:70px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 5%;
+  background:rgba(255,255,255,.98);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--rule);transition:box-shadow .3s;}
+nav.raised{box-shadow:0 2px 28px rgba(30,58,138,.1);}
+.nav-brand{display:flex;align-items:center;gap:11px;cursor:pointer;}
+.planiq-mark{width:44px;height:44px;background:transparent;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;border-radius:0;position:relative;overflow:visible;}
+.planiq-mark::after{display:none;}
+.nav-brand-text{display:flex;flex-direction:column;gap:2px;}
+.nav-brand-wordmark{font-family:var(--font-serif);font-size:1.25rem;font-weight:500;
+  color:var(--slate);letter-spacing:-.02em;line-height:1;}
+.nav-brand-wordmark .iq{color:var(--amber);font-style:italic;}
+.nav-brand-sub{font-family:var(--font-sans);font-size:.58rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);}
+.nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none;}
+.nav-links a,.nav-links button{font-size:.78rem;font-weight:500;color:var(--ink-70);
+  letter-spacing:.01em;transition:color .2s;background:none;border:none;cursor:pointer;
+  font-family:var(--font-sans);padding:0;}
+.nav-links a:hover,.nav-links button:hover{color:var(--teal);}
+
+/* Industries dropdown */
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{
+  display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  margin-top:8px;background:var(--white);border:1px solid var(--rule);
+  border-radius:6px;box-shadow:0 8px 32px rgba(10,15,30,.12);
+  min-width:260px;z-index:999;padding:8px 0;
+}
+.nav-dropdown-menu.open{display:block !important;}
+.nav-dropdown-menu a{display:flex;align-items:center;gap:10px;padding:10px 18px;
+  font-size:.8rem;color:var(--ink-70);font-weight:400;transition:background .15s,color .15s;}
+.nav-dropdown-menu a:hover{background:var(--teal-lt);color:var(--teal);}
+.nav-dropdown-menu a{cursor:pointer;}
+.nav-dropdown-menu a .ind-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+.nav-dropdown-arrow{font-size:.65rem;margin-left:3px;}
+
+.nav-links .nav-cta a{background:var(--teal);color:var(--white);padding:9px 22px;
+  border-radius:3px;font-size:.76rem;font-weight:600;transition:background .2s;}
+.nav-links .nav-cta a:hover{background:var(--teal-mid);}
+
+/* ─────────────────────────────────────────────────────────────
+   08  PAGE SYSTEM  (JS toggles .active)
+   ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════ PAGE SYSTEM ═══════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   08  PAGE SYSTEM  (JS toggles .active to show/hide pages)
    ───────────────────────────────────────────────────────────── */
 
 .page        { display: none; }
 .page.active { display: block; }
 
-
 /* ─────────────────────────────────────────────────────────────
-   08–24  SECTIONS, COMPONENTS & RESPONSIVE
-          (Hero · Value Strip · Problem · Services · Industries ·
-           Impact · Process · Testimonials · CTA Banner · FAQ ·
-           Contact · Footer · Industry Subpages · About · Why ·
-           Animations · Responsive breakpoints)
+   09  HERO SECTION
    ───────────────────────────────────────────────────────────── */
-
 /* ═══════════════════════ HERO ═══════════════════════ */
 .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:70px;}
 .hero-left{display:flex;flex-direction:column;justify-content:center;
@@ -409,6 +479,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .hkpi-val em{font-style:normal;color:#60a5fa;}
 .hkpi-label{font-size:.62rem;color:rgba(255,255,255,.36);margin-top:4px;letter-spacing:.04em;}
 
+/* ─────────────────────────────────────────────────────────────
+   10  VALUE STRIP
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ VALUE STRIP ═══════════════════════ */
 .value-strip{background:var(--teal);padding:0 5%;display:grid;
   grid-template-columns:repeat(4,1fr);border-top:3px solid var(--amber);}
@@ -421,6 +494,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .vs-sub{font-family:var(--font-mono);font-size:.56rem;letter-spacing:.14em;
   text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:2px;}
 
+/* ─────────────────────────────────────────────────────────────
+   11  PROBLEM SECTION
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ PROBLEM SECTION ═══════════════════════ */
 .problem{
   padding:0;
@@ -545,6 +621,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 }
 .chart-insight strong{color:rgba(255,255,255,.75);font-weight:600;}
 
+/* ─────────────────────────────────────────────────────────────
+   12  SERVICES OVERVIEW  (image-backed cards)
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ SERVICES OVERVIEW ═══════════════════════ */
 .services-overview{padding:100px 5%;}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
@@ -606,6 +685,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .svc-card:hover .svc-arrow{color:#f97316;transform:translate(2px,-2px);}
 .svc-card.amber-hover:hover .svc-arrow{color:#f97316;}
 
+/* ─────────────────────────────────────────────────────────────
+   13  INDUSTRIES HUB
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ INDUSTRIES HUB ═══════════════════════ */
 .industries-hub{padding:100px 5%;background:var(--slate);}
 .ind-hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
@@ -632,6 +714,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
   opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
 .ind-hub-card:hover .ind-hub-cta{opacity:1;transform:translateY(0);}
 
+/* ─────────────────────────────────────────────────────────────
+   14  IMPACT NUMBERS
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ IMPACT NUMBERS ═══════════════════════ */
 .impact{padding:100px 5%;background:var(--fog);}
 .impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
@@ -642,6 +727,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .impact-label{font-size:.88rem;font-weight:500;color:var(--slate);margin-bottom:.4rem;}
 .impact-desc{font-size:.8rem;color:var(--ink-45);font-weight:400;line-height:1.6;}
 
+/* ─────────────────────────────────────────────────────────────
+   15  PROCESS STEPS
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ PROCESS ═══════════════════════ */
 .process{padding:100px 5%;}
 .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
@@ -656,6 +744,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
   color:var(--teal-deep);margin-bottom:.7rem;}
 .step-desc{font-size:.875rem;font-weight:400;color:var(--ink-70);line-height:1.75;}
 
+/* ─────────────────────────────────────────────────────────────
+   16  TESTIMONIALS
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ TESTIMONIALS ═══════════════════════ */
 .testimonials{padding:100px 5%;background:var(--fog);}
 .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
@@ -677,6 +768,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .test-name{font-size:.84rem;font-weight:600;color:var(--ink);}
 .test-role{font-size:.71rem;color:var(--ink-45);margin-top:1px;}
 
+/* ─────────────────────────────────────────────────────────────
+   17  CTA BANNER
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ CTA BANNER ═══════════════════════ */
 .cta-banner{position:relative;overflow:hidden;background:var(--teal);
   padding:90px 5%;display:grid;grid-template-columns:1fr auto;gap:60px;align-items:center;}
@@ -691,6 +785,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
   font-weight:400;line-height:1.6;max-width:520px;position:relative;}
 .cta-actions{display:flex;flex-direction:column;gap:.8rem;flex-shrink:0;position:relative;}
 
+/* ─────────────────────────────────────────────────────────────
+   18  FAQ ACCORDION
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ FAQ ═══════════════════════ */
 .faq{padding:100px 5%;display:grid;grid-template-columns:280px 1fr;gap:80px;}
 .faq-left .overline{margin-bottom:1.4rem;}
@@ -709,6 +806,9 @@ nav.raised { box-shadow: 0 2px 28px rgba(30, 58, 138, 0.10); }
 .faq-a{font-size:.9rem;color:var(--ink-70);line-height:1.8;padding-bottom:20px;display:none;}
 .faq-a.open{display:block;}
 
+/* ─────────────────────────────────────────────────────────────
+   19  CONTACT SECTION
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ CONTACT ═══════════════════════ */
 .contact{display:grid;grid-template-columns:1fr 1fr;}
 .contact-visual{position:relative;overflow:hidden;background:var(--slate);min-height:600px;}
@@ -746,6 +846,9 @@ textarea.fi{resize:vertical;min-height:100px;}
   display:flex;align-items:center;justify-content:center;gap:10px;}
 .form-submit:hover{background:var(--teal-mid);transform:translateY(-1px);}
 
+/* ─────────────────────────────────────────────────────────────
+   20  FOOTER
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ FOOTER ═══════════════════════ */
 footer{background:var(--slate);padding:76px 5% 40px;}
 .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;
@@ -773,6 +876,9 @@ footer{background:var(--slate);padding:76px 5% 40px;}
 .footer-mono{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.18em;
   text-transform:uppercase;color:rgba(255,255,255,.13);}
 
+/* ─────────────────────────────────────────────────────────────
+   21  INDUSTRY SUBPAGES
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ INDUSTRY PAGE ═══════════════════════ */
 .ind-page-hero{min-height:52vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-top:70px;}
 .ind-page-hero-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.45;}
@@ -837,6 +943,9 @@ footer{background:var(--slate);padding:76px 5% 40px;}
 .ind-cta h2{font-family:var(--font-serif);font-size:clamp(1.6rem,2.5vw,2.3rem);
   font-weight:400;color:var(--white);line-height:1.2;max-width:520px;}
 
+/* ─────────────────────────────────────────────────────────────
+   22  ABOUT SECTION & FILMSTRIP
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ ABOUT / FILMSTRIP ═══════════════════════ */
 .filmstrip{display:grid;grid-template-columns:repeat(4,1fr);height:190px;gap:2px;background:var(--slate);}
 .fs-cell{position:relative;overflow:hidden;}
@@ -874,6 +983,9 @@ footer{background:var(--slate);padding:76px 5% 40px;}
   animation:pulse 2.2s infinite;}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,58,138,.4);}70%{box-shadow:0 0 0 9px rgba(30,58,138,0);}100%{box-shadow:0 0 0 0 rgba(30,58,138,0);}}
 
+/* ─────────────────────────────────────────────────────────────
+   24  ANIMATIONS & SCROLL REVEAL
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ ANIMATIONS ═══════════════════════ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .fade-up{opacity:0;animation:fadeUp .75s var(--ease) both;}
@@ -881,6 +993,9 @@ footer{background:var(--slate);padding:76px 5% 40px;}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s var(--ease),transform .75s var(--ease);}
 .reveal.in{opacity:1;transform:translateY(0);}
 
+/* ─────────────────────────────────────────────────────────────
+   25  RESPONSIVE BREAKPOINTS
+   ───────────────────────────────────────────────────────────── */
 /* ═══════════════════════ RESPONSIVE ═══════════════════════ */
 @media(max-width:1100px){
   .problem-inner{grid-template-columns:1fr;}
@@ -909,6 +1024,9 @@ footer{background:var(--slate);padding:76px 5% 40px;}
   .value-strip{grid-template-columns:1fr 1fr;}.test-grid{grid-template-columns:1fr;}
   .why-grid{grid-template-columns:1fr;}
 }
+/* ─────────────────────────────────────────────────────────────
+   23  WHY PLANIQ SECTION
+   ───────────────────────────────────────────────────────────── */
 /* why grid */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,.06);}
 .why-card{background:rgba(255,255,255,.03);padding:40px 34px;border-bottom:2px solid transparent;transition:background .25s,border-color .25s;}
@@ -919,3 +1037,47 @@ footer{background:var(--slate);padding:76px 5% 40px;}
 .why-title{font-family:var(--font-serif);font-size:.98rem;font-weight:500;color:var(--white);margin-bottom:.5rem;}
 .why-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.7;}
 .why-tagline{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-top:.8rem;}
+
+
+/* ── Tile-card button (CTA banner — matches uploaded image) ── */
+.btn-tile{
+  display:inline-flex;flex-direction:column;justify-content:space-between;
+  width:200px;height:180px;
+  background:#1e3a8a;
+  border:none;cursor:pointer;padding:22px 20px 20px;
+  border-radius:8px;text-decoration:none;
+  position:relative;overflow:hidden;
+  transition:background .25s var(--ease),transform .2s var(--ease),box-shadow .25s;
+}
+.btn-tile:hover{
+  background:#2444a8;
+  transform:translateY(-3px);
+  box-shadow:0 16px 40px rgba(10,15,30,.35);
+}
+.btn-tile-label{
+  font-family:var(--font-sans);
+  font-size:.9rem;font-weight:600;
+  color:rgba(255,255,255,.92);
+  letter-spacing:-.01em;
+  line-height:1.35;
+  text-align:left;
+  align-self:flex-start;
+}
+.btn-tile-arrow{
+  align-self:flex-end;
+  width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .25s var(--ease);
+}
+.btn-tile:hover .btn-tile-arrow{transform:translate(3px,-3px);}
+.btn-tile-arrow svg{
+  width:44px;height:44px;
+  stroke:#0a0f1e;fill:none;
+  stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.btn-tile::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,transparent 60%);
+  border-radius:8px;opacity:0;transition:opacity .3s;
+}
+.btn-tile:hover::after{opacity:1;}

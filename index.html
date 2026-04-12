@@ -2406,12 +2406,11 @@ function showToast(msg, isError) {
 
 /* ══════════════════════════════════════════
    SECURE EMAIL — calls Cloudflare Worker
-   Worker URL: update WORKER_URL below after
-   running: npx wrangler deploy
-   It will look like:
-   https://planaiq.YOUR-NAME.workers.dev
+   Same domain as the site — no URL change needed.
+   Worker handles POST /api/send-email
+   Everything else serves static files.
 ══════════════════════════════════════════ */
-var WORKER_URL = 'https://planaiq.infoplanaiq.workers.dev';
+var WORKER_URL = '/api/send-email';
 
 async function sendEmail(formType, fields, onSuccess, onError) {
   try {

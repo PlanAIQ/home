@@ -2406,13 +2406,16 @@ function showToast(msg, isError) {
 
 /* ══════════════════════════════════════════
    SECURE EMAIL — calls Cloudflare Worker
-   No credentials in this file.
-   Worker: functions/api/send-email.js
-   API endpoint: /api/send-email
+   Worker URL: update WORKER_URL below after
+   running: npx wrangler deploy
+   It will look like:
+   https://planaiq.YOUR-NAME.workers.dev
 ══════════════════════════════════════════ */
+var WORKER_URL = 'https://planaiq.YOUR-SUBDOMAIN.workers.dev';
+
 async function sendEmail(formType, fields, onSuccess, onError) {
   try {
-    const res  = await fetch('/api/send-email', {
+    const res  = await fetch(WORKER_URL, {
       method : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body   : JSON.stringify({ formType, ...fields }),
@@ -2424,7 +2427,6 @@ async function sendEmail(formType, fields, onSuccess, onError) {
     if (data.ok) {
       if (onSuccess) onSuccess();
     } else {
-      /* Surface the real server error so debugging is easy */
       throw new Error(data.error || 'Unknown server error (HTTP ' + res.status + ')');
     }
   } catch (err) {

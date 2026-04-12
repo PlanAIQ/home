@@ -2405,26 +2405,30 @@ function showToast(msg, isError) {
 }
 
 /* ══════════════════════════════════════════
-   SECURE EMAIL — calls Node.js backend
+   SECURE EMAIL — calls Cloudflare Worker
    No credentials in this file.
-   Backend: server.js  (runs on your host)
+   Worker: functions/api/send-email.js
    API endpoint: /api/send-email
 ══════════════════════════════════════════ */
 async function sendEmail(formType, fields, onSuccess, onError) {
   try {
-    const res = await fetch('/api/send-email', {
+    const res  = await fetch('/api/send-email', {
       method : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body   : JSON.stringify({ formType, ...fields }),
     });
-    const data = await res.json();
+    let data;
+    try { data = await res.json(); }
+    catch (_) { throw new Error('Server returned an unreadable response (HTTP ' + res.status + ')'); }
+
     if (data.ok) {
       if (onSuccess) onSuccess();
     } else {
-      throw new Error(data.error || 'Server error');
+      /* Surface the real server error so debugging is easy */
+      throw new Error(data.error || 'Unknown server error (HTTP ' + res.status + ')');
     }
   } catch (err) {
-    console.error('Email send error:', err);
+    console.error('sendEmail error:', err.message);
     if (onError) onError(err);
   }
 }
@@ -2485,7 +2489,7 @@ function submitAuditModal() {
     if (msgEl)     msgEl.value     = '';
     if (btn) { btn.disabled = false; btn.textContent = 'Send Request'; }
   }, function(err) {
-    showToast('Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
+    showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
     if (btn) { btn.disabled = false; btn.textContent = 'Send Request'; }
   });
 }
@@ -2514,7 +2518,7 @@ function submitContactForm() {
     document.querySelectorAll('.form input, .form select, .form textarea').forEach(function(el){ el.value=''; });
     if (btn) { btn.disabled=false; btn.innerHTML='Submit Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
   }, function(err) {
-    showToast('Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
+    showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
     if (btn) { btn.disabled=false; btn.innerHTML='Submit Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
   });
 }

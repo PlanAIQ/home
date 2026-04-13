@@ -1314,17 +1314,17 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900;
     <h3>Send a Message</h3>
     <p class="contact-form-tagline">Tell us about your operation — we respond within 12 hours.</p>
     <div class="form">
-      <div class="form-row"><input class="fi" type="text" placeholder="Your Name"/><input class="fi" type="text" placeholder="Company Name"/></div>
-      <div class="form-row"><input class="fi" type="email" placeholder="Email Address"/><input class="fi" type="tel" placeholder="Phone Number"/></div>
+      <div class="form-row"><input class="fi" type="text" placeholder="Your Name"/><input class="fi" type="text" placeholder="Company / Organization"/></div>
+      <div class="form-row"><input class="fi" id="contact-email" type="email" placeholder="Email Address"/><input class="fi" type="tel" placeholder="Phone (optional)"/></div>
       <select class="fi">
         <option value="" disabled selected>Industry / Type of Business</option>
         <option>Manufacturing</option><option>Retail &amp; E-Commerce</option>
         <option>Logistics &amp; Supply Chain</option><option>Technology</option>
         <option>Construction &amp; Real Estate</option><option>Energy &amp; Utilities</option><option>Other</option>
       </select>
-      <textarea class="fi" placeholder="Describe your biggest data or operational challenge…"></textarea>
+      <textarea class="fi" id="contact-message" placeholder="Describe your biggest data or operational challenge…" maxlength="10000" required></textarea>
       <button class="form-submit" onclick="submitContactForm()">
-        Submit Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Send Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </div>
@@ -2442,15 +2442,19 @@ function openAuditModal(preSubject, formType) {
   var typeEl = m.querySelector('#audit-modal-formtype');
   var titleEl = m.querySelector('#audit-modal-title');
   var subTitle = m.querySelector('.audit-modal-sub');
+  var btnEl = m.querySelector('#audit-submit-btn');
+  var svgArrow = '<svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   if (subEl)  subEl.value  = preSubject || '';
   if (typeEl) typeEl.value = formType   || 'audit';
-  // Update modal title for consultation vs audit
+  // Update modal title and button for consultation vs audit
   if (formType === 'consultation') {
     if (titleEl)  titleEl.textContent = 'Book a Consultation';
     if (subTitle) subTitle.textContent = 'Tell us about your business goals — we\'ll schedule a focused call at a time that works for you.';
+    if (btnEl)    btnEl.innerHTML = 'Request Consultation' + svgArrow;
   } else {
     if (titleEl)  titleEl.textContent = 'Request Your Free Audit';
     if (subTitle) subTitle.textContent = 'Tell us about your business — we\'ll map every data gap and deliver a written action plan. No cost, no obligation.';
+    if (btnEl)    btnEl.innerHTML = 'Get My Free Audit' + svgArrow;
   }
   m.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2488,10 +2492,10 @@ function submitAuditModal() {
     if (phoneEl)   phoneEl.value   = '';
     if (companyEl) companyEl.value = '';
     if (msgEl)     msgEl.value     = '';
-    if (btn) { btn.disabled = false; btn.textContent = 'Send Request'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = ftype === 'consultation' ? 'Request Consultation <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : 'Get My Free Audit <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
   }, function(err) {
     showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
-    if (btn) { btn.disabled = false; btn.textContent = 'Send Request'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = ftype === 'consultation' ? 'Request Consultation <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : 'Get My Free Audit <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
   });
 }
 
@@ -2505,22 +2509,35 @@ function submitContactForm() {
   var name     = document.querySelector('.form input[type="text"]') ? document.querySelector('.form input[type="text"]').value.trim() : '';
   var inputs   = document.querySelectorAll('.form input[type="text"]');
   var company  = inputs.length > 1 ? inputs[1].value.trim() : '';
-  var email    = document.querySelector('.form input[type="email"]') ? document.querySelector('.form input[type="email"]').value.trim() : '';
+  var emailEl  = document.getElementById('contact-email') || document.querySelector('.form input[type="email"]');
+  var email    = emailEl ? emailEl.value.trim() : '';
   var phone    = document.querySelector('.form input[type="tel"]') ? document.querySelector('.form input[type="tel"]').value.trim() : '';
   var industry = document.querySelector('.form select') ? document.querySelector('.form select').value : '';
-  var message  = document.querySelector('.form textarea') ? document.querySelector('.form textarea').value.trim() : '';
+  var msgEl    = document.getElementById('contact-message') || document.querySelector('.form textarea');
+  var message  = msgEl ? msgEl.value.trim() : '';
+  var svgBtn   = ' <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
   if (!name || !email) { showToast('Please enter your name and email address.', true); return; }
+  // Email format validation
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) { showToast('Please enter a valid email address.', true); return; }
+  // Message is mandatory
+  if (!message) { showToast('Please describe your challenge — the message field is required.', true); return; }
+  // Max 10000 characters (enforced by maxlength attr too, but double-check)
+  if (message.length > 10000) { showToast('Your message exceeds the 10,000 character limit. Please shorten it.', true); return; }
+
   var btn = document.querySelector('.form-submit');
   if (btn) { btn.disabled = true; btn.innerHTML = 'Sending…'; }
   sendEmail('contact', {
     name: name, email: email, phone: phone, company: company, industry: industry, message: message
   }, function() {
-    showToast('✓ Message sent! We\'ll respond within 12 hours.');
+    // Show success popup modal
+    showSuccessPopup();
     document.querySelectorAll('.form input, .form select, .form textarea').forEach(function(el){ el.value=''; });
-    if (btn) { btn.disabled=false; btn.innerHTML='Submit Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    if (btn) { btn.disabled=false; btn.innerHTML='Send Message' + svgBtn; }
   }, function(err) {
     showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
-    if (btn) { btn.disabled=false; btn.innerHTML='Submit Message <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    if (btn) { btn.disabled=false; btn.innerHTML='Send Message' + svgBtn; }
   });
 }
 
@@ -2543,7 +2560,70 @@ window.addEventListener('DOMContentLoaded', () => {
     if (rect.top < window.innerHeight) el.classList.add('in');
   });
 });
+
+/* ─── Success popup (contact form) ─── */
+function showSuccessPopup() {
+  var p = document.getElementById('success-popup');
+  if (p) { p.classList.add('open'); document.body.style.overflow = 'hidden'; }
+}
+function closeSuccessPopup() {
+  var p = document.getElementById('success-popup');
+  if (p) { p.classList.remove('open'); document.body.style.overflow = ''; }
+}
 </script>
+
+<!-- ═══ CONTACT FORM SUCCESS POPUP ═══ -->
+<div id="success-popup" class="success-popup-overlay" onclick="if(event.target===this)closeSuccessPopup()" role="dialog" aria-modal="true" aria-labelledby="success-popup-title">
+  <div class="success-popup-box">
+    <button class="success-popup-close" onclick="closeSuccessPopup()" aria-label="Close">✕</button>
+    <div class="success-popup-icon">
+      <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
+        <circle cx="26" cy="26" r="25" stroke="var(--teal)" stroke-width="2" fill="var(--teal-lt)"/>
+        <path d="M15 26.5l8 8 14-16" stroke="var(--teal)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2 id="success-popup-title" class="success-popup-title">Thanks for reaching out!</h2>
+    <p class="success-popup-msg">We have received your message and will get back to you as soon as possible.</p>
+    <button class="success-popup-btn" onclick="closeSuccessPopup()">Close</button>
+  </div>
+</div>
+<style>
+.success-popup-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(10,18,35,.72);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.success-popup-overlay.open{display:flex;}
+.success-popup-box{
+  background:#fff;border-radius:16px;padding:44px 40px 40px;
+  max-width:420px;width:100%;text-align:center;position:relative;
+  box-shadow:0 24px 64px rgba(0,0,0,.22);
+  animation:successIn .32s cubic-bezier(.34,1.36,.64,1) both;
+}
+@keyframes successIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
+.success-popup-close{
+  position:absolute;top:14px;right:16px;background:none;border:none;
+  font-size:1.1rem;color:var(--ink-45);cursor:pointer;line-height:1;
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  transition:color .15s,background .15s;
+}
+.success-popup-close:hover{color:var(--teal);background:var(--fog);}
+.success-popup-icon{margin:0 auto 20px;width:52px;height:52px;}
+.success-popup-title{
+  font-family:var(--font-serif);font-size:1.45rem;font-weight:400;
+  color:var(--ink);margin:0 0 12px;line-height:1.25;
+}
+.success-popup-msg{
+  font-size:.92rem;color:var(--ink-45);line-height:1.7;margin:0 0 28px;
+}
+.success-popup-btn{
+  background:var(--teal);color:#fff;border:none;border-radius:8px;
+  padding:12px 32px;font-family:var(--font-sans);font-size:.88rem;
+  font-weight:700;letter-spacing:.04em;cursor:pointer;
+  transition:background .2s,transform .15s;
+}
+.success-popup-btn:hover{background:var(--teal-mid);transform:translateY(-1px);}
+</style>
 
 <!-- ═══ AUDIT ENQUIRY MODAL ═══ -->
 <div id="audit-modal" class="audit-modal-overlay" onclick="if(event.target===this)closeAuditModal()" role="dialog" aria-modal="true" aria-labelledby="audit-modal-title">
@@ -2559,15 +2639,15 @@ window.addEventListener('DOMContentLoaded', () => {
       <input type="hidden" id="audit-modal-formtype" value="audit"/>
       <div class="audit-form-row">
         <input class="audit-fi" type="text" id="audit-name" placeholder="Your Name *" autocomplete="name"/>
-        <input class="audit-fi" type="text" id="audit-company" placeholder="Company Name" autocomplete="organization"/>
+        <input class="audit-fi" type="text" id="audit-company" placeholder="Company / Organization" autocomplete="organization"/>
       </div>
       <div class="audit-form-row">
         <input class="audit-fi" type="email" id="audit-email" placeholder="Email Address *" autocomplete="email"/>
-        <input class="audit-fi" type="tel" id="audit-phone" placeholder="Phone Number" autocomplete="tel"/>
+        <input class="audit-fi" type="tel" id="audit-phone" placeholder="Phone (optional)" autocomplete="tel"/>
       </div>
-      <textarea class="audit-fi" id="audit-message" rows="4" placeholder="Describe your biggest operational or data challenge…"></textarea>
+      <textarea class="audit-fi" id="audit-message" rows="4" placeholder="Describe your biggest operational or data challenge…" maxlength="10000"></textarea>
       <button class="audit-submit-btn" id="audit-submit-btn" onclick="submitAuditModal()">
-        Send Request
+        Get My Free Audit
         <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <p class="audit-privacy">We respond within 12 hours. Your information is never shared.</p>

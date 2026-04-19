@@ -2486,13 +2486,7 @@ function submitAuditModal() {
     name: name, email: email, phone: phone, company: company, message: msg
   }, function() {
     closeAuditModal();
-    showToast('✓ Message sent! We\'ll be in touch within 12 hours.');
-    if (nameEl)    nameEl.value    = '';
-    if (emailEl)   emailEl.value   = '';
-    if (phoneEl)   phoneEl.value   = '';
-    if (companyEl) companyEl.value = '';
-    if (msgEl)     msgEl.value     = '';
-    if (btn) { btn.disabled = false; btn.innerHTML = ftype === 'consultation' ? 'Request Consultation <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : 'Get My Free Audit <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    showThankYou();
   }, function(err) {
     showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
     if (btn) { btn.disabled = false; btn.innerHTML = ftype === 'consultation' ? 'Request Consultation <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : 'Get My Free Audit <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;margin-left:6px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
@@ -2531,10 +2525,7 @@ function submitContactForm() {
   sendEmail('contact', {
     name: name, email: email, phone: phone, company: company, industry: industry, message: message
   }, function() {
-    // Show success popup modal
-    showSuccessPopup();
-    document.querySelectorAll('.form input, .form select, .form textarea').forEach(function(el){ el.value=''; });
-    if (btn) { btn.disabled=false; btn.innerHTML='Send Message' + svgBtn; }
+    showThankYou();
   }, function(err) {
     showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
     if (btn) { btn.disabled=false; btn.innerHTML='Send Message' + svgBtn; }
@@ -2719,3 +2710,193 @@ textarea.audit-fi{resize:vertical;min-height:96px;}
 }
 .audit-submit-btn:hover{background:var(--teal-mid);transform:translateY(-1px);box-shadow:0 8px 24px rgba(153,24,24,.3);}
 .audit-submit-btn:disabled{opacity:.6;cursor:not-allowed
+}
+.audit-privacy{font-size:.76rem;color:var(--ink-45);text-align:center;margin-top:12px;line-height:1.5;}
+</style>
+
+<!-- ═══ THANK YOU PAGE (embedded overlay) ═══ -->
+<div id="thankyou-page" class="ty-overlay" role="dialog" aria-modal="true" aria-label="Thank you for your submission">
+  <div class="ty-bg-grid"></div>
+  <div class="ty-bg-glow"></div>
+  <div class="ty-corner ty-tl"></div>
+  <div class="ty-corner ty-tr"></div>
+  <div class="ty-corner ty-bl"></div>
+  <div class="ty-corner ty-br"></div>
+  <main class="ty-card">
+    <div class="ty-logo" aria-label="Plan AIQ">
+      <span class="ty-brand">Plan<em>AIQ</em></span>
+      <span class="ty-sub">Business Intelligence</span>
+    </div>
+    <div class="ty-check" aria-hidden="true">
+      <svg viewBox="0 0 28 28" fill="none"><path d="M5.5 14.5L11.5 20.5L22.5 8" stroke="#991818" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1 class="ty-h1">You're All <em>Set!</em></h1>
+    <div class="ty-rule"></div>
+    <p class="ty-lead">Thank you for reaching out to Plan AIQ.<br>We've received your request and our team is on it.</p>
+    <p class="ty-note">A specialist will be in touch within <strong>1 business day</strong> to discuss your data, analytics, and business intelligence goals.</p>
+    <div class="ty-steps">
+      <div class="ty-step"><div class="ty-snum">Step 01</div><div class="ty-stxt">We review your request &amp; prepare tailored questions</div></div>
+      <div class="ty-step"><div class="ty-snum">Step 02</div><div class="ty-stxt">We schedule your free strategy or audit call</div></div>
+      <div class="ty-step"><div class="ty-snum">Step 03</div><div class="ty-stxt">We build your custom BI &amp; analytics solution</div></div>
+    </div>
+    <a href="/" class="ty-btn" onclick="hideThankYou(event)">
+      Return to Plan AIQ
+      <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </main>
+  <p class="ty-footer">planaiq.co &nbsp;·&nbsp; Business Intelligence &amp; Analytics Consulting</p>
+</div>
+
+<style>
+/* ═══ THANK YOU OVERLAY ═══ */
+.ty-overlay{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:var(--slate);
+  align-items:center;justify-content:center;flex-direction:column;
+  overflow-y:auto;
+}
+.ty-overlay.open{display:flex;}
+
+.ty-bg-grid{
+  position:fixed;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(153,24,24,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(153,24,24,.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  animation:tyGrid 24s linear infinite;
+}
+@keyframes tyGrid{from{background-position:0 0}to{background-position:56px 56px}}
+
+.ty-bg-glow{
+  position:fixed;width:800px;height:800px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(153,24,24,.16) 0%,transparent 68%);
+  animation:tyGlow 5s ease-in-out infinite;
+}
+@keyframes tyGlow{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+
+.ty-corner{position:fixed;width:40px;height:40px;}
+.ty-tl{top:24px;left:24px;border-top:1.5px solid var(--teal);border-left:1.5px solid var(--teal);}
+.ty-tr{top:24px;right:24px;border-top:1.5px solid var(--teal);border-right:1.5px solid var(--teal);}
+.ty-bl{bottom:24px;left:24px;border-bottom:1.5px solid var(--teal);border-left:1.5px solid var(--teal);}
+.ty-br{bottom:24px;right:24px;border-bottom:1.5px solid var(--teal);border-right:1.5px solid var(--teal);}
+
+.ty-card{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:52px 60px 48px;max-width:640px;width:92%;
+  background:rgba(22,32,53,.60);
+  border:1px solid rgba(153,24,24,.22);border-radius:20px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 24px 64px rgba(0,0,0,.40),0 0 0 1px rgba(255,255,255,.04) inset;
+  margin:32px 0;
+  animation:tyUp .9s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes tyUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+
+.ty-logo{display:flex;align-items:baseline;gap:6px;justify-content:center;margin-bottom:36px;}
+.ty-brand{font-family:var(--font-serif);font-size:1.6rem;font-weight:600;letter-spacing:-.02em;color:var(--white);}
+.ty-brand em{font-style:normal;color:var(--amber);}
+.ty-sub{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+
+.ty-check{
+  width:72px;height:72px;border-radius:50%;
+  border:1.5px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;position:relative;
+  animation:tyPop .65s cubic-bezier(.34,1.56,.64,1) .3s both;
+}
+@keyframes tyPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.ty-check::before{
+  content:'';position:absolute;inset:-9px;border-radius:50%;
+  border:1px solid rgba(153,24,24,.3);
+  animation:tyRing 2.2s ease-out .9s infinite;
+}
+@keyframes tyRing{from{opacity:.5;transform:scale(1)}to{opacity:0;transform:scale(1.6)}}
+.ty-check svg{width:26px;height:26px;}
+
+.ty-h1{font-family:var(--font-serif);font-size:clamp(1.9rem,4vw,2.6rem);font-weight:700;color:var(--white);line-height:1.12;margin-bottom:8px;}
+.ty-h1 em{font-style:italic;color:var(--teal-mid);}
+
+.ty-rule{width:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--amber));border-radius:2px;margin:18px auto 22px;animation:tyRule .75s var(--ease) .45s both;}
+@keyframes tyRule{from{width:0;opacity:0}to{width:52px;opacity:1}}
+
+.ty-lead{font-size:1rem;color:rgba(255,255,255,.70);line-height:1.8;margin-bottom:8px;}
+.ty-note{font-size:.86rem;color:rgba(255,255,255,.38);line-height:1.7;margin-bottom:40px;}
+.ty-note strong{color:rgba(255,255,255,.62);font-weight:600;}
+
+.ty-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;margin-bottom:40px;}
+.ty-step{
+  background:rgba(255,255,255,.03);border:1px solid rgba(153,24,24,.17);
+  border-radius:11px;padding:16px 12px 14px;
+  transition:border-color .25s,background .25s;
+}
+.ty-step:hover{border-color:rgba(153,24,24,.38);background:rgba(153,24,24,.06);}
+.ty-snum{font-size:.63rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:7px;}
+.ty-stxt{font-size:.78rem;color:rgba(255,255,255,.48);line-height:1.5;}
+
+.ty-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 34px;background:var(--teal);color:var(--white);
+  text-decoration:none;font-family:var(--font-sans);
+  font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  border-radius:8px;transition:background .25s,transform .2s,box-shadow .25s;
+  box-shadow:0 6px 20px rgba(153,24,24,.28);
+}
+.ty-btn:hover{background:var(--teal-mid);transform:translateY(-2px);box-shadow:0 10px 28px rgba(153,24,24,.42);}
+
+.ty-footer{
+  position:relative;z-index:5;margin-top:20px;margin-bottom:28px;
+  font-size:.67rem;color:rgba(255,255,255,.16);letter-spacing:.14em;text-transform:uppercase;
+}
+
+@media(max-width:560px){
+  .ty-card{padding:36px 24px 32px;}
+  .ty-steps{grid-template-columns:1fr;gap:8px;}
+  .ty-corner{width:28px;height:28px;}
+}
+</style>
+
+<script>
+/* ─── Thank You overlay ─── */
+function showThankYou() {
+  var el = document.getElementById('thankyou-page');
+  if (!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+  // Update URL so Google Business sees /thank-you
+  if (history.pushState) {
+    history.pushState({ thankyou: true }, 'Thank You | Plan AIQ', '/thank-you');
+  }
+}
+function hideThankYou(e) {
+  if (e) e.preventDefault();
+  var el = document.getElementById('thankyou-page');
+  if (el) el.classList.remove('open');
+  document.body.style.overflow = '';
+  if (history.pushState) {
+    history.pushState({}, document.title, '/');
+  }
+}
+// If someone lands directly on /thank-you URL, show the overlay
+if (window.location.pathname === '/thank-you') {
+  document.addEventListener('DOMContentLoaded', function() { showThankYou(); });
+}
+// Handle browser back button
+window.addEventListener('popstate', function(e) {
+  var el = document.getElementById('thankyou-page');
+  if (!el) return;
+  if (window.location.pathname === '/thank-you') {
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    el.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -633,6 +633,43 @@ textarea.fi{resize:vertical;min-height:100px;}
   cursor:pointer;width:100%;transition:background .2s,transform .15s;
   display:flex;align-items:center;justify-content:center;gap:10px;}
 .form-submit:hover{background:var(--teal-mid);transform:translateY(-1px);}
+/* ═══ FIELD VALIDATION STATES ═══ */
+.fi.fi--error{border-bottom-color:#dc2626!important;background:#fff8f8!important;}
+.fi.fi--error:focus{border-bottom-color:#dc2626!important;background:#fff5f5!important;}
+.audit-fi.fi--error{border-color:#dc2626!important;background:#fff8f8!important;box-shadow:0 0 0 3px rgba(220,38,38,.12)!important;}
+.fi-err-msg{
+  display:none;font-family:var(--font-sans);font-size:.74rem;font-weight:600;
+  color:#dc2626;background:var(--white);padding:5px 16px 9px;
+  line-height:1.4;
+}
+.fi-err-msg::before{content:'⚠\00a0';}
+.audit-fi-err-msg{
+  display:none;font-family:var(--font-sans);font-size:.74rem;font-weight:600;
+  color:#dc2626;background:#fff;padding:0 0 8px 2px;line-height:1.4;
+}
+.audit-fi-err-msg::before{content:'⚠\00a0';}
+
+/* ═══ TOAST NOTIFICATION (was missing all CSS) ═══ */
+.planaiq-toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  padding:13px 22px 13px 18px;border-radius:9px;
+  font-family:var(--font-sans);font-size:.875rem;font-weight:600;
+  opacity:0;pointer-events:none;z-index:99999;
+  transition:opacity .28s ease,transform .28s ease;
+  max-width:min(460px,calc(100vw - 40px));text-align:center;
+  box-shadow:0 8px 28px rgba(0,0,0,.22);
+  display:flex;align-items:center;gap:9px;
+}
+.toast-error{background:#991818;color:#fff;}
+.toast-success{background:#166534;color:#fff;}
+.toast-error::before{content:'✕';font-size:.8rem;background:rgba(255,255,255,.20);
+  border-radius:50%;width:20px;height:20px;display:inline-flex;
+  align-items:center;justify-content:center;flex-shrink:0;}
+.toast-success::before{content:'✓';font-size:.8rem;background:rgba(255,255,255,.20);
+  border-radius:50%;width:20px;height:20px;display:inline-flex;
+  align-items:center;justify-content:center;flex-shrink:0;}
+
 
 /* ═══════════════════════ FOOTER ═══════════════════════ */
 footer{background:var(--slate);padding:76px 5% 40px;}
@@ -1314,7 +1351,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900;
     <h3>Send a Message</h3>
     <p class="contact-form-tagline">Tell us about your operation — we respond within 12 hours.</p>
     <div class="form">
-      <div class="form-row"><input class="fi" type="text" placeholder="Your Name"/><input class="fi" type="text" placeholder="Company / Organization"/></div>
+      <div class="form-row"><input class="fi" id="contact-name" type="text" placeholder="Your Name" autocomplete="name"/><input class="fi" type="text" placeholder="Company / Organization"/></div>
       <div class="form-row"><input class="fi" id="contact-email" type="email" placeholder="Email Address"/><input class="fi" type="tel" placeholder="Phone (optional)"/></div>
       <select class="fi">
         <option value="" disabled selected>Industry / Type of Business</option>
@@ -2399,9 +2436,66 @@ function showToast(msg, isError) {
   var t = document.getElementById('planaiq-toast');
   if (!t) return;
   t.textContent = msg;
-  t.className = 'planaiq-toast' + (isError ? ' toast-error' : ' toast-success');
-  t.style.opacity = '1'; t.style.transform = 'translateY(0)';
-  setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateY(20px)'; }, 4000);
+  t.className = 'planaiq-toast ' + (isError ? 'toast-error' : 'toast-success');
+  // Force reflow so transition fires from the hidden state
+  void t.offsetHeight;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._toastTimer);
+  t._toastTimer = setTimeout(function() {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, isError ? 5500 : 3500);
+}
+
+/* ─── Field-level validation helpers ─── */
+function setFieldError(el, msg) {
+  if (!el) return;
+  el.classList.add('fi--error');
+  el.setAttribute('aria-invalid', 'true');
+  var errId = (el.id || el.name || 'fi') + '-err';
+  var span = document.getElementById(errId);
+  if (!span) {
+    span = document.createElement('div');
+    span.id = errId;
+    // Pick the right class depending on the field type
+    span.className = el.classList.contains('audit-fi') ? 'audit-fi-err-msg' : 'fi-err-msg';
+    span.setAttribute('role', 'alert');
+    // Insert: after the row if it's inside one, otherwise right after the field
+    var row = el.closest('.form-row, .audit-form-row');
+    if (row) {
+      row.parentNode.insertBefore(span, row.nextSibling);
+    } else {
+      el.parentNode.insertBefore(span, el.nextSibling);
+    }
+  }
+  span.textContent = msg;
+  span.style.display = 'block';
+  // Focus the first errored field in the form
+  if (!el.closest('form, .form, .audit-modal-body').querySelector('[aria-invalid="true"]:not(#' + el.id + ')')) {
+    el.focus();
+  }
+}
+
+function clearFieldError(el) {
+  if (!el) return;
+  el.classList.remove('fi--error');
+  el.removeAttribute('aria-invalid');
+  var errId = (el.id || el.name || 'fi') + '-err';
+  var span = document.getElementById(errId);
+  if (span) { span.style.display = 'none'; span.textContent = ''; }
+}
+
+function clearAllFieldErrors(scopeEl) {
+  if (!scopeEl) return;
+  scopeEl.querySelectorAll('.fi--error').forEach(function(el) {
+    el.classList.remove('fi--error');
+    el.removeAttribute('aria-invalid');
+  });
+  scopeEl.querySelectorAll('.fi-err-msg, .audit-fi-err-msg').forEach(function(el) {
+    el.style.display = 'none';
+    el.textContent = '';
+  });
 }
 
 /* ══════════════════════════════════════════
@@ -2429,7 +2523,6 @@ async function sendEmail(formType, fields, onSuccess, onError) {
       throw new Error(data.error || 'Unknown server error (HTTP ' + res.status + ')');
     }
   } catch (err) {
-    console.error('sendEmail error:', err.message);
     if (onError) onError(err);
   }
 }
@@ -2461,7 +2554,10 @@ function openAuditModal(preSubject, formType) {
 }
 function closeAuditModal() {
   var m = document.getElementById('audit-modal');
-  if (m) m.classList.remove('open');
+  if (m) {
+    m.classList.remove('open');
+    clearAllFieldErrors(m);
+  }
   document.body.style.overflow = '';
 }
 function submitAuditModal() {
@@ -2511,14 +2607,34 @@ function submitContactForm() {
   var message  = msgEl ? msgEl.value.trim() : '';
   var svgBtn   = ' <svg viewBox="0 0 14 14" fill="none" style="width:13px;height:13px;"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  if (!name || !email) { showToast('Please enter your name and email address.', true); return; }
-  // Email format validation
   var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!emailRegex.test(email)) { showToast('Please enter a valid email address.', true); return; }
-  // Message is mandatory
-  if (!message) { showToast('Please describe your challenge — the message field is required.', true); return; }
-  // Max 10000 characters (enforced by maxlength attr too, but double-check)
-  if (message.length > 10000) { showToast('Your message exceeds the 10,000 character limit. Please shorten it.', true); return; }
+  var nameEl  = document.getElementById('contact-name');
+  var emailEl = document.getElementById('contact-email');
+  var msgEl2  = document.getElementById('contact-message');
+  var formScope = document.querySelector('.form').parentElement;
+  var valid = true;
+
+  clearAllFieldErrors(formScope);
+
+  if (!name) {
+    setFieldError(nameEl, 'Your name is required.');
+    valid = false;
+  }
+  if (!email) {
+    setFieldError(emailEl, 'Your email address is required.');
+    valid = false;
+  } else if (!emailRegex.test(email)) {
+    setFieldError(emailEl, 'Please enter a valid email address (e.g. you@company.com).');
+    valid = false;
+  }
+  if (!message) {
+    setFieldError(msgEl2, 'Please describe your challenge — this field is required.');
+    valid = false;
+  } else if (message.length > 10000) {
+    setFieldError(msgEl2, 'Your message exceeds the 10,000 character limit. Please shorten it.');
+    valid = false;
+  }
+  if (!valid) return;
 
   var btn = document.querySelector('.form-submit');
   if (btn) { btn.disabled = true; btn.innerHTML = 'Sending…'; }
@@ -2527,7 +2643,8 @@ function submitContactForm() {
   }, function() {
     showThankYou();
   }, function(err) {
-    showToast((err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com', true);
+    var msg = (err && err.message) ? err.message : 'Something went wrong — please email us directly at infoplanaiq@gmail.com';
+    showToast(msg, true);
     if (btn) { btn.disabled=false; btn.innerHTML='Send Message' + svgBtn; }
   });
 }
@@ -2545,11 +2662,67 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 /* ─── Init reveals on load ─── */
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.reveal').forEach(el => {
-    const rect = el.getBoundingClientRect();
+window.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    var rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight) el.classList.add('in');
   });
+
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  /* ── Contact form: blur + input event wiring ── */
+  var cName = document.getElementById('contact-name');
+  var cEmail = document.getElementById('contact-email');
+  var cMsg  = document.getElementById('contact-message');
+
+  if (cName) {
+    cName.addEventListener('blur', function() {
+      if (!this.value.trim()) setFieldError(this, 'Your name is required.');
+      else clearFieldError(this);
+    });
+    cName.addEventListener('input', function() { if (this.value.trim()) clearFieldError(this); });
+  }
+  if (cEmail) {
+    cEmail.addEventListener('blur', function() {
+      var v = this.value.trim();
+      if (!v) setFieldError(this, 'Your email address is required.');
+      else if (!emailRe.test(v)) setFieldError(this, 'Please enter a valid email address (e.g. you@company.com).');
+      else clearFieldError(this);
+    });
+    cEmail.addEventListener('input', function() {
+      if (emailRe.test(this.value.trim())) clearFieldError(this);
+    });
+  }
+  if (cMsg) {
+    cMsg.addEventListener('blur', function() {
+      if (!this.value.trim()) setFieldError(this, 'Please describe your challenge — this field is required.');
+      else clearFieldError(this);
+    });
+    cMsg.addEventListener('input', function() { if (this.value.trim()) clearFieldError(this); });
+  }
+
+  /* ── Audit modal: blur + input event wiring ── */
+  var aName  = document.getElementById('audit-name');
+  var aEmail = document.getElementById('audit-email');
+
+  if (aName) {
+    aName.addEventListener('input', function() { if (this.value.trim()) clearFieldError(this); });
+    aName.addEventListener('blur', function() {
+      if (!this.value.trim()) setFieldError(this, 'Your name is required.');
+      else clearFieldError(this);
+    });
+  }
+  if (aEmail) {
+    aEmail.addEventListener('blur', function() {
+      var v = this.value.trim();
+      if (!v) setFieldError(this, 'Your email address is required.');
+      else if (!emailRe.test(v)) setFieldError(this, 'Please enter a valid email address (e.g. you@company.com).');
+      else clearFieldError(this);
+    });
+    aEmail.addEventListener('input', function() {
+      if (emailRe.test(this.value.trim())) clearFieldError(this);
+    });
+  }
 });
 
 /* ─── Success popup (contact form) ─── */

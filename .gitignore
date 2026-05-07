@@ -1,9 +1,27 @@
-node_modules
-.wrangler
-dist
-.DS_Store
+# Secrets
+.env
+.dev.vars          # Wrangler local secrets file
 
-.dev.vars*
-!.dev.vars.example
-.env*
-!.env.example
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Wrangler cache
+.wrangler/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+wrangler-debug.log*

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You | Plan AIQ — Business Intelligence &amp; Analytics</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens (mirrors index.html) ── */
+:root {
+  --red:       #991818;
+  --red-deep:  #6B0F0F;
+  --red-mid:   #B52020;
+  --red-glow:  rgba(153,24,24,.22);
+  --amber:     #f59e0b;
+  --slate:     #0F1A2E;
+  --slate-mid: #162035;
+  --slate-light:#1E2E4A;
+  --ink:       #0F1A2E;
+  --ink-60:    rgba(15,26,46,.60);
+  --fog:       #F4F6FA;
+  --white:     #ffffff;
+  --rule:      rgba(255,255,255,.10);
+  --font-serif:'Lora','Book Antiqua',Palatino,Georgia,serif;
+  --font-sans: 'Nunito Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --ease:      cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; }
+body {
+  font-family: var(--font-sans);
+  background: var(--slate);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Animated background grid ── */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(153,24,24,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153,24,24,.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: gridScroll 24s linear infinite;
+  pointer-events: none;
+}
+@keyframes gridScroll {
+  from { background-position: 0 0; }
+  to   { background-position: 56px 56px; }
+}
+
+/* ── Radial glow ── */
+.bg-glow {
+  position: fixed;
+  width: 800px; height: 800px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(153,24,24,.16) 0%, transparent 68%);
+  animation: glowPulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: .7; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 1;  transform: translate(-50%, -50%) scale(1.08); }
+}
+
+/* ── Corner brackets (brand motif) ── */
+.corner { position: fixed; width: 44px; height: 44px; }
+.corner-tl { top:24px; left:24px;  border-top:1.5px solid var(--red); border-left:1.5px solid var(--red); }
+.corner-tr { top:24px; right:24px; border-top:1.5px solid var(--red); border-right:1.5px solid var(--red); }
+.corner-bl { bottom:24px; left:24px;  border-bottom:1.5px solid var(--red); border-left:1.5px solid var(--red); }
+.corner-br { bottom:24px; right:24px; border-bottom:1.5px solid var(--red); border-right:1.5px solid var(--red); }
+
+/* ── Main card ── */
+.card {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 64px 52px;
+  max-width: 660px;
+  width: 92%;
+  background: rgba(22, 32, 53, .60);
+  border: 1px solid rgba(153,24,24,.25);
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 64px rgba(0,0,0,.40), 0 0 0 1px rgba(255,255,255,.04) inset;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes cardUp {
+  from { opacity:0; transform:translateY(36px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── Logo wordmark ── */
+.logo-wrap {
+  margin-bottom: 40px;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .05s both;
+}
+.logo-wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: center;
+}
+.logo-wordmark .brand {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  color: var(--white);
+}
+.logo-wordmark .brand em {
+  font-style: normal;
+  color: var(--amber);
+}
+.logo-wordmark .sub {
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+}
+
+/* ── Check mark ── */
+.check-ring {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  border: 1.5px solid var(--red);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 30px;
+  position: relative;
+  animation: checkPop .65s cubic-bezier(.34,1.56,.64,1) .3s both;
+}
+@keyframes checkPop {
+  from { opacity:0; transform:scale(.4); }
+  to   { opacity:1; transform:scale(1); }
+}
+.check-ring::before {
+  content: '';
+  position: absolute; inset: -9px;
+  border-radius: 50%;
+  border: 1px solid rgba(153,24,24,.3);
+  animation: ringOut 2.2s ease-out .9s infinite;
+}
+@keyframes ringOut {
+  from { opacity:.5; transform:scale(1); }
+  to   { opacity:0;  transform:scale(1.6); }
+}
+.check-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+.check-icon svg { width:28px; height:28px; }
+
+/* ── Headline ── */
+h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.12;
+  margin-bottom: 10px;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .15s both;
+}
+h1 .accent { color: var(--red-mid); font-style: italic; }
+
+/* ── Rule ── */
+.divider {
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--red), var(--amber));
+  border-radius: 2px;
+  margin: 20px auto 24px;
+  animation: divExpand .75s var(--ease) .45s both;
+}
+@keyframes divExpand {
+  from { width:0; opacity:0; }
+  to   { width:56px; opacity:1; }
+}
+
+/* ── Body copy ── */
+.copy-lead {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,.72);
+  line-height: 1.8;
+  margin-bottom: 8px;
+  font-weight: 400;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .2s both;
+}
+.copy-sub {
+  font-size: .88rem;
+  color: rgba(255,255,255,.40);
+  line-height: 1.7;
+  margin-bottom: 44px;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .25s both;
+}
+.copy-sub strong { color: rgba(255,255,255,.65); font-weight: 600; }
+
+/* ── Steps ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 44px;
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .32s both;
+}
+.step {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(153,24,24,.18);
+  border-radius: 12px;
+  padding: 18px 14px 16px;
+  transition: border-color .25s var(--ease), background .25s var(--ease);
+}
+.step:hover {
+  border-color: rgba(153,24,24,.4);
+  background: rgba(153,24,24,.06);
+}
+.step-num {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--red-mid);
+  margin-bottom: 8px;
+}
+.step-text {
+  font-size: .8rem;
+  color: rgba(255,255,255,.50);
+  line-height: 1.55;
+}
+
+/* ── CTA button ── */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  background: var(--red);
+  color: var(--white);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: background .25s var(--ease), transform .2s var(--ease), box-shadow .25s var(--ease);
+  animation: cardUp .9s cubic-bezier(.16,1,.3,1) .4s both;
+  box-shadow: 0 6px 20px rgba(153,24,24,.30);
+}
+.btn-cta:hover {
+  background: var(--red-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(153,24,24,.45);
+}
+.btn-cta svg { width:13px; height:13px; flex-shrink:0; }
+
+/* ── Footer note ── */
+.footer-tag {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: .68rem;
+  color: rgba(255,255,255,.18);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .card { padding: 40px 28px 36px; }
+  .steps { grid-template-columns: 1fr; gap: 10px; }
+  .corner { width:30px; height:30px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<main class="card" role="main">
+
+  <!-- Logo -->
+  <div class="logo-wrap" aria-label="Plan AIQ">
+    <div class="logo-wordmark">
+      <span class="brand">Plan<em>AIQ</em></span>
+      <span class="sub">Business Intelligence</span>
+    </div>
+  </div>
+
+  <!-- Success indicator -->
+  <div class="check-ring" aria-hidden="true">
+    <span class="check-icon">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.5 14.5L11.5 20.5L22.5 8" stroke="#991818" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </div>
+
+  <!-- Headline -->
+  <h1>You're All <span class="accent">Set!</span></h1>
+
+  <div class="divider" role="separator"></div>
+
+  <!-- Body copy -->
+  <p class="copy-lead">
+    Thank you for reaching out to Plan AIQ.<br>
+    We've received your request and our team is on it.
+  </p>
+  <p class="copy-sub">
+    A specialist will be in touch within <strong>1 business day</strong> to discuss
+    your data, analytics, and business intelligence goals.
+  </p>
+
+  <!-- What happens next -->
+  <div class="steps" aria-label="What happens next">
+    <div class="step">
+      <div class="step-num">Step 01</div>
+      <div class="step-text">We review your request &amp; prepare tailored questions</div>
+    </div>
+    <div class="step">
+      <div class="step-num">Step 02</div>
+      <div class="step-text">We schedule your free strategy or audit call</div>
+    </div>
+    <div class="step">
+      <div class="step-num">Step 03</div>
+      <div class="step-text">We build your custom BI &amp; analytics solution</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <a href="https://planaiq.co" class="btn-cta" aria-label="Return to Plan AIQ website">
+    Return to Plan AIQ
+    <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+</main>
+
+<p class="footer-tag">planaiq.co &nbsp;·&nbsp; Business Intelligence &amp; Analytics Consulting</p>
+
+</body>
+</html>
